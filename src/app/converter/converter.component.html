@@ -1,0 +1,29 @@
+<div class="image-converter-container">
+  <h2 class="title">Image Converter</h2>
+
+  <div class="file-input">
+    <input type="file" accept="image/*" multiple (change)="onFilesSelected($event)" />
+  </div>
+
+  <div class="format-selector" *ngIf="selectedImages.length > 0">
+    <label for="format">Select Format:</label>
+    <select id="format" [(ngModel)]="outputFormat">
+
+      <option value="{{item.value}}" *ngFor="let item of availableFormats">{{item.label}}</option>
+    </select>
+
+    <button (click)="convertImages()">Convert</button>
+  </div>
+
+  <div class="converted-images" *ngIf="convertedImageData.length > 0">
+    <h3>Converted Images</h3>
+    <div class="image-gallery">
+      <div class="image-card" *ngFor="let convertedImage of convertedImageData; let i = index">
+        <img [src]="convertedImage.url" alt="Converted Image {{ i + 1 }}" />
+        <a [href]="convertedImage.url" [download]="convertedImage.name">Download</a>
+      </div>
+    </div>
+
+    <button (click)="downloadAllFiles()" class="download-all-btn">Download All</button>
+  </div>
+</div>
