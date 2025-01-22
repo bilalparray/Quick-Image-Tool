@@ -6,6 +6,8 @@
     "start": "ng serve",
     "build": "npm i && ng build ",
     "watch": "ng build --watch --configuration development",
+    "prod": "ng build --watch --configuration production --base-href=\"https://bilalparray.github.io/imageTool/\"",
+
     "test": "ng test",
     "serve:ssr:quickimagetool": "node dist/quickimagetool/server/server.mjs"
   },
