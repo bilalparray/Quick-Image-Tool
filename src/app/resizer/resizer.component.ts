@@ -13,6 +13,10 @@ export class ResizerComponent {
   images: { file: File; preview: string; width: number; height: number }[] = [];
   maintainAspectRatio: boolean = true;
 
+  // Single width and height values for all images
+  globalWidth: number | null = null;
+  globalHeight: number | null = null;
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input?.files) {
@@ -35,31 +39,33 @@ export class ResizerComponent {
     }
   }
 
-  updateDimensions(
-    index: number,
-    event: Event,
-    dimension: 'width' | 'height'
-  ): void {
-    const input = event.target as HTMLInputElement;
-    if (input) {
-      const newValue = parseInt(input.value, 10);
-      const image = this.images[index];
-      if (this.maintainAspectRatio) {
-        const aspectRatio = image.width / image.height;
-        if (dimension === 'width') {
-          image.width = newValue;
-          image.height = Math.round(newValue / aspectRatio);
-        } else if (dimension === 'height') {
-          image.height = newValue;
-          image.width = Math.round(newValue * aspectRatio);
+  applyDimensions(): void {
+    if (this.globalWidth || this.globalHeight) {
+      this.images = this.images.map((image) => {
+        if (this.maintainAspectRatio) {
+          const aspectRatio = image.width / image.height;
+          if (this.globalWidth) {
+            return {
+              ...image,
+              width: this.globalWidth,
+              height: Math.round(this.globalWidth / aspectRatio),
+            };
+          } else if (this.globalHeight) {
+            return {
+              ...image,
+              height: this.globalHeight,
+              width: Math.round(this.globalHeight * aspectRatio),
+            };
+          }
+        } else {
+          return {
+            ...image,
+            width: this.globalWidth || image.width,
+            height: this.globalHeight || image.height,
+          };
         }
-      } else {
-        if (dimension === 'width') {
-          image.width = newValue;
-        } else if (dimension === 'height') {
-          image.height = newValue;
-        }
-      }
+        return image;
+      });
     }
   }
 

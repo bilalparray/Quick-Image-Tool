@@ -13,18 +13,24 @@
     </label>
   </div>
 
+  <!-- Global width and height inputs -->
+  <div class="global-dimensions">
+    <label>
+      Width:
+      <input type="number" [(ngModel)]="globalWidth" (change)="applyDimensions()" placeholder="Enter width" />
+    </label>
+    <label>
+      Height:
+      <input type="number" [(ngModel)]="globalHeight" (change)="applyDimensions()" placeholder="Enter height" />
+    </label>
+  </div>
+
   <div class="images-list">
     <div *ngFor="let image of images; let i = index" class="image-item">
       <img [src]="image.preview" [alt]="image.file.name" />
       <div class="dimensions">
-        <label>
-          Width:
-          <input type="number" [value]="image.width" (input)="updateDimensions(i, $event, 'width')" />
-        </label>
-        <label>
-          Height:
-          <input type="number" [value]="image.height" (input)="updateDimensions(i, $event, 'height')" />
-        </label>
+        <p><strong>Width:</strong> {{ image.width }} px</p>
+        <p><strong>Height:</strong> {{ image.height }} px</p>
       </div>
       <button (click)="downloadImage(i)">Download</button>
     </div>
