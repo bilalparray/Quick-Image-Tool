@@ -4,10 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm i && ng build ",
+    "build": "npm i && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "prod": "ng build --watch --configuration production --base-href=\"https://bilalparray.github.io/imageTool/\"",
-
     "test": "ng test",
     "serve:ssr:quickimagetool": "node dist/quickimagetool/server/server.mjs"
   },

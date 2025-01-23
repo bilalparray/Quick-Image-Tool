@@ -1,0 +1,34 @@
+<div class="image-resizer-container">
+  <h1>Image Resizer</h1>
+  <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" />
+
+  <div class="aspect-ratio-control">
+    <label>
+      <input type="radio" name="aspect-ratio" [checked]="maintainAspectRatio" (change)="maintainAspectRatio = true" />
+      Maintain Aspect Ratio
+    </label>
+    <label>
+      <input type="radio" name="aspect-ratio" [checked]="!maintainAspectRatio" (change)="maintainAspectRatio = false" />
+      Custom Dimensions
+    </label>
+  </div>
+
+  <div class="images-list">
+    <div *ngFor="let image of images; let i = index" class="image-item">
+      <img [src]="image.preview" [alt]="image.file.name" />
+      <div class="dimensions">
+        <label>
+          Width:
+          <input type="number" [value]="image.width" (input)="updateDimensions(i, $event, 'width')" />
+        </label>
+        <label>
+          Height:
+          <input type="number" [value]="image.height" (input)="updateDimensions(i, $event, 'height')" />
+        </label>
+      </div>
+      <button (click)="downloadImage(i)">Download</button>
+    </div>
+  </div>
+
+  <button (click)="downloadAll()">Download All</button>
+</div>
