@@ -24,12 +24,42 @@ export class Base64Component {
   }
 
   // Function to copy Base64 string to the clipboard
-  copyToClipboard() {
-    if (this.base64Image) {
-      navigator.clipboard.writeText(this.base64Image).then(
-        () => alert('Base64 string copied to clipboard!'),
-        (err) => alert('Failed to copy: ' + err)
+  copyToClipboard(copyFullString: boolean): void {
+    const base64Data = this.base64Image || '';
+    let textToCopy = base64Data;
+
+    // Extract only the Base64 part if needed
+    if (!copyFullString && base64Data.startsWith('data:image/')) {
+      textToCopy = base64Data.split(',')[1]; // Extract only the Base64 part
+    }
+
+    // Check if the Clipboard API is supported
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(
+        () =>
+          alert(
+            copyFullString
+              ? 'Full Base64 string copied!'
+              : 'Base64 data copied!'
+          ),
+        () => alert('Failed to copy to clipboard!')
       );
+    } else {
+      // Fallback: Create a temporary textarea for copying
+      const tempTextarea = document.createElement('textarea');
+      tempTextarea.value = textToCopy;
+      document.body.appendChild(tempTextarea);
+      tempTextarea.select();
+      try {
+        document.execCommand('copy');
+        alert(
+          copyFullString ? 'Full Base64 string copied!' : 'Base64 data copied!'
+        );
+      } catch (err) {
+        alert('Failed to copy to clipboard!');
+      } finally {
+        document.body.removeChild(tempTextarea);
+      }
     }
   }
 

@@ -10,12 +10,15 @@
     <label for="base64Textarea" class="label">Base64 String:</label>
     <textarea id="base64Textarea" rows="8" [(ngModel)]="base64Image" class="textarea"
       placeholder="Your Base64 string will appear here..."></textarea>
-    <button (click)="copyToClipboard()" class="button">Copy</button>
+    <div class="button-group">
+      <button (click)="copyToClipboard(true)" class="button">Copy Full String</button>
+      <button (click)="copyToClipboard(false)" class="button secondary">Copy Only Base64</button>
+    </div>
   </div>
 
   <!-- Render the Base64 as an image -->
   <div class="section">
-    <button (click)="renderBase64AsImage()" class="button render-btn">Convert Base64 to Image</button>
+    <button (click)="renderBase64AsImage()" class="button render-btn">Render Base64 as Image</button>
     <div *ngIf="convertedImageSrc" class="image-preview">
       <h3 class="image-title">Rendered Image:</h3>
       <img [src]="convertedImageSrc" alt="Converted from Base64" class="image" />
