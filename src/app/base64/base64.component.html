@@ -1,0 +1,24 @@
+<div class="image-converter-container">
+  <!-- Input for selecting an image -->
+  <div class="section">
+    <label for="imageInput" class="label">Select an Image:</label>
+    <input id="imageInput" type="file" (change)="onFileSelected($event)" class="file-input" />
+  </div>
+
+  <!-- Textarea to display Base64 string -->
+  <div class="section">
+    <label for="base64Textarea" class="label">Base64 String:</label>
+    <textarea id="base64Textarea" rows="8" [(ngModel)]="base64Image" class="textarea"
+      placeholder="Your Base64 string will appear here..."></textarea>
+    <button (click)="copyToClipboard()" class="button">Copy</button>
+  </div>
+
+  <!-- Render the Base64 as an image -->
+  <div class="section">
+    <button (click)="renderBase64AsImage()" class="button render-btn">Convert Base64 to Image</button>
+    <div *ngIf="convertedImageSrc" class="image-preview">
+      <h3 class="image-title">Rendered Image:</h3>
+      <img [src]="convertedImageSrc" alt="Converted from Base64" class="image" />
+    </div>
+  </div>
+</div>
