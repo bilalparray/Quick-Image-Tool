@@ -2,6 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+interface ImageData {
+  file: File;
+  preview: string;
+  width: number;
+  height: number;
+}
+
 @Component({
   selector: 'app-resizer',
   templateUrl: './resizer.component.html',
@@ -10,14 +17,25 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
 })
 export class ResizerComponent {
-  images: { file: File; preview: string; width: number; height: number }[] = [];
+  // Array to hold the original uploaded images
+  uploadedImages: ImageData[] = [];
+  // Array to hold the resized images after processing
+  resizedImages: ImageData[] = [];
   maintainAspectRatio: boolean = true;
 
-  // Single width and height values for all images
+  // Global width and height values for resizing
   globalWidth: number | null = null;
   globalHeight: number | null = null;
 
+  // Flags for controlling UI state
+  showResizedImages: boolean = false;
+  isLoading: boolean = false;
+
   onFileSelected(event: Event): void {
+    // Clear previous images and results
+    this.uploadedImages = [];
+    this.resizedImages = [];
+    this.showResizedImages = false;
     const input = event.target as HTMLInputElement;
     if (input?.files) {
       Array.from(input.files).forEach((file) => {
@@ -26,7 +44,7 @@ export class ResizerComponent {
           const img = new Image();
           img.src = e.target.result;
           img.onload = () => {
-            this.images.push({
+            this.uploadedImages.push({
               file: file,
               preview: e.target.result,
               width: img.width,
@@ -41,36 +59,55 @@ export class ResizerComponent {
 
   applyDimensions(): void {
     if (this.globalWidth || this.globalHeight) {
-      this.images = this.images.map((image) => {
-        if (this.maintainAspectRatio) {
-          const aspectRatio = image.width / image.height;
-          if (this.globalWidth) {
-            return {
-              ...image,
-              width: this.globalWidth,
-              height: Math.round(this.globalWidth / aspectRatio),
-            };
-          } else if (this.globalHeight) {
-            return {
-              ...image,
-              height: this.globalHeight,
-              width: Math.round(this.globalHeight * aspectRatio),
-            };
+      // Clear previous results and show the results container
+      this.resizedImages = [];
+      this.isLoading = true;
+      this.showResizedImages = true;
+
+      let processed = 0;
+      // Process each image asynchronously to simulate a loading delay
+      this.uploadedImages.forEach((image, index) => {
+        setTimeout(() => {
+          let newWidth = image.width;
+          let newHeight = image.height;
+          if (this.maintainAspectRatio) {
+            const aspectRatio = image.width / image.height;
+            if (this.globalWidth) {
+              newWidth = this.globalWidth;
+              newHeight = Math.round(this.globalWidth / aspectRatio);
+            } else if (this.globalHeight) {
+              newHeight = this.globalHeight;
+              newWidth = Math.round(this.globalHeight * aspectRatio);
+            }
+          } else {
+            newWidth = this.globalWidth || image.width;
+            newHeight = this.globalHeight || image.height;
           }
-        } else {
-          return {
-            ...image,
-            width: this.globalWidth || image.width,
-            height: this.globalHeight || image.height,
-          };
-        }
-        return image;
+          this.resizedImages.push({
+            file: image.file,
+            preview: image.preview,
+            width: newWidth,
+            height: newHeight,
+          });
+          processed++;
+
+          // When all images are processed, hide the loader and scroll to the results
+          if (processed === this.uploadedImages.length) {
+            this.isLoading = false;
+            setTimeout(() => {
+              const resultsEl = document.getElementById('resized-results');
+              if (resultsEl) {
+                resultsEl.scrollIntoView({ behavior: 'smooth' });
+              }
+            }, 100);
+          }
+        }, index * 200); // 200ms delay for each image (adjust as needed)
       });
     }
   }
 
-  downloadImage(index: number): void {
-    const image = this.images[index];
+  downloadResizedImage(index: number): void {
+    const image = this.resizedImages[index];
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
@@ -83,14 +120,14 @@ export class ResizerComponent {
         ctx.drawImage(img, 0, 0, image.width, image.height);
 
         const link = document.createElement('a');
-        link.download = `resized-${image.file.name}`;
+        link.download = image.file.name;
         link.href = canvas.toDataURL('image/jpeg');
         link.click();
       };
     }
   }
 
-  downloadAll(): void {
-    this.images.forEach((_, index) => this.downloadImage(index));
+  downloadAllResized(): void {
+    this.resizedImages.forEach((_, index) => this.downloadResizedImage(index));
   }
 }

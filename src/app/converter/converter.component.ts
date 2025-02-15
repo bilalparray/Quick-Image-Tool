@@ -65,7 +65,7 @@ export class ConverterComponent {
           ctx.drawImage(img, 0, 0);
 
           const convertedImage = canvas.toDataURL(this.outputFormat);
-          const fileName = `converted-image-${index + 1}.${
+          const fileName = `${index + 1}.${
             this.outputFormat.split('/')[1]
           }`;
           this.convertedImageData.push({ url: convertedImage, name: fileName });

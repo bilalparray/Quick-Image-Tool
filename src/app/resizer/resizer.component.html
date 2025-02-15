@@ -1,40 +1,86 @@
 <div class="image-resizer-container">
   <h1>Image Resizer</h1>
-  <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" />
-
-  <div class="aspect-ratio-control">
-    <label>
-      <input type="radio" name="aspect-ratio" [checked]="maintainAspectRatio" (change)="maintainAspectRatio = true" />
-      Maintain Aspect Ratio
-    </label>
-    <label>
-      <input type="radio" name="aspect-ratio" [checked]="!maintainAspectRatio" (change)="maintainAspectRatio = false" />
-      Custom Dimensions
-    </label>
-  </div>
-
-  <!-- Global width and height inputs -->
-  <div class="global-dimensions">
-    <label>
-      Width:
-      <input type="number" [(ngModel)]="globalWidth" (change)="applyDimensions()" placeholder="Enter width" />
-    </label>
-    <label>
-      Height:
-      <input type="number" [(ngModel)]="globalHeight" (change)="applyDimensions()" placeholder="Enter height" />
-    </label>
-  </div>
-
-  <div class="images-list">
-    <div *ngFor="let image of images; let i = index" class="image-item">
-      <img [src]="image.preview" [alt]="image.file.name" />
-      <div class="dimensions">
-        <p><strong>Width:</strong> {{ image.width }} px</p>
-        <p><strong>Height:</strong> {{ image.height }} px</p>
+  
+  <!-- Top Section: Two Columns -->
+  <div class="top-section">
+    <!-- Left Column: Step 1 – Select & Preview Images -->
+    <div class="left-column">
+      <div class="upload-section">
+        <h2>Step 1: Select Images</h2>
+        <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" />
       </div>
-      <button (click)="downloadImage(i)">Download</button>
+      <div class="uploaded-images-preview" *ngIf="uploadedImages.length > 0">
+        <h3>Uploaded Image Previews</h3>
+        <div class="image-grid">
+          <div *ngFor="let image of uploadedImages" class="image-item">
+            <img
+              [src]="image.preview"
+              [alt]="image.file.name"
+              [style.maxWidth.px]="150"
+              [style.maxHeight.px]="150"
+            />
+            <p>{{ image.file.name }}</p>
+            <p><strong>Original:</strong> {{ image.width }} x {{ image.height }} px</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Step 2 – Resize Controls -->
+    <div class="right-column" *ngIf="uploadedImages.length > 0">
+      <div class="resize-controls">
+        <h2>Step 2: Resize Images</h2>
+        <div class="aspect-ratio-control">
+          <label>
+            <input
+              type="radio"
+              name="aspect-ratio"
+              [checked]="maintainAspectRatio"
+              (change)="maintainAspectRatio = true"
+            />
+            Maintain Aspect Ratio
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="aspect-ratio"
+              [checked]="!maintainAspectRatio"
+              (change)="maintainAspectRatio = false"
+            />
+            Custom Dimensions
+          </label>
+        </div>
+        <div class="global-dimensions">
+          <label>
+            Width:
+            <input type="number" [(ngModel)]="globalWidth" placeholder="Enter width" />
+          </label>
+          <label>
+            Height:
+            <input type="number" [(ngModel)]="globalHeight" placeholder="Enter height" />
+          </label>
+        </div>
+        <button (click)="applyDimensions()">Resize</button>
+      </div>
     </div>
   </div>
 
-  <button (click)="downloadAll()">Download All</button>
+  <!-- Bottom Section: Full-Width Resized Images Preview -->
+  <div id="resized-results" class="resized-images-preview" *ngIf="showResizedImages">
+    <h2>Step 3: Resized Images Preview</h2>
+    <div class="image-grid">
+      <div *ngFor="let image of resizedImages; let i = index" class="image-item">
+        <img [src]="image.preview" [alt]="image.file.name" />
+        <p>{{ image.file.name }}</p>
+        <p><strong>Resized:</strong> {{ image.width }} x {{ image.height }} px</p>
+        <button (click)="downloadResizedImage(i)">Download</button>
+      </div>
+      <!-- Loader element at the end of the grid if processing is still ongoing -->
+      <div class="image-item loader" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+      </div>
+    </div>
+    <button (click)="downloadAllResized()">Download All</button>
+  </div>
 </div>
