@@ -1,5 +1,12 @@
 <div class="image-resizer-container">
+  
+  
   <h1>Image Resizer</h1>
+  
+  <!-- Display counts for uploaded images -->
+  <div *ngIf="uploadedImages.length > 0" class="count-info">
+    <p><strong>Uploaded Files:</strong> {{ uploadedImages.length }}</p>
+  </div>
   
   <!-- Top Section: Two Columns -->
   <div class="top-section">
@@ -68,6 +75,12 @@
   <!-- Bottom Section: Full-Width Resized Images Preview -->
   <div id="resized-results" class="resized-images-preview" *ngIf="showResizedImages">
     <h2>Step 3: Resized Images Preview</h2>
+    
+    <!-- Show count of resized images -->
+    <div class="count-info">
+      <p><strong>Resized Files:</strong> {{ resizedImages.length }}</p>
+    </div>
+    
     <div class="image-grid">
       <div *ngFor="let image of resizedImages; let i = index" class="image-item">
         <img [src]="image.preview" [alt]="image.file.name" />
@@ -81,6 +94,11 @@
         <p>Processing...</p>
       </div>
     </div>
-    <button (click)="downloadAllResized()">Download All</button>
+    <!-- Two options for downloading all images -->
+    <div class="download-buttons">
+      <button (click)="downloadAllResized()">Download All Individually</button>
+      <button (click)="downloadAllAsZip()">Download All as ZIP</button>
+    </div>
   </div>
 </div>
+

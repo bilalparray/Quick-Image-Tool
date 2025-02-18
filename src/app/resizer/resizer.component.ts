@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
+
 interface ImageData {
   file: File;
   preview: string;
@@ -26,11 +29,13 @@ export class ResizerComponent {
   // Global width and height values for resizing
   globalWidth: number | null = null;
   globalHeight: number | null = null;
-
+  showAlert = false;
   // Flags for controlling UI state
   showResizedImages: boolean = false;
   isLoading: boolean = false;
-
+  closeAlert() {
+    this.showAlert = false;
+  }
   onFileSelected(event: Event): void {
     // Clear previous images and results
     this.uploadedImages = [];
@@ -128,6 +133,38 @@ export class ResizerComponent {
   }
 
   downloadAllResized(): void {
+    // Trigger individual downloads (may be blocked for large numbers)
     this.resizedImages.forEach((_, index) => this.downloadResizedImage(index));
+  }
+
+  downloadAllAsZip(): void {
+    const zip = new JSZip();
+    const imgFolder = zip.folder("resized_images");
+
+    // Create an array of promises to ensure all images are processed before zipping
+    const promises = this.resizedImages.map((image) => {
+      return new Promise<void>((resolve) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        img.src = image.preview;
+        img.onload = () => {
+          canvas.width = image.width;
+          canvas.height = image.height;
+          ctx!.drawImage(img, 0, 0, image.width, image.height);
+          const dataUrl = canvas.toDataURL('image/jpeg');
+          // Remove the data URL prefix (e.g. "data:image/jpeg;base64,")
+          const base64Data = dataUrl.split(',')[1];
+          imgFolder?.file(image.file.name, base64Data, { base64: true });
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(promises).then(() => {
+      zip.generateAsync({ type: 'blob' }).then((content:any) => {
+        saveAs(content, 'resized_images.zip');
+      });
+    });
   }
 }
