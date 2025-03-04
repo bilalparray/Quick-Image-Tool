@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './cropper.component.html',
   styleUrls: ['./cropper.component.scss'],
   standalone: true,
-  imports: [ImageCropperComponent, FormsModule, CommonModule]
+  imports: [ImageCropperComponent, FormsModule, CommonModule],
 })
 export class CropperComponent {
   // File input event data
@@ -21,7 +21,7 @@ export class CropperComponent {
   presetCropSizes = [
     { width: 200, height: 200, label: '200 x 200' },
     { width: 300, height: 300, label: '300 x 300' },
-    { width: 400, height: 400, label: '400 x 400' }
+    { width: 400, height: 400, label: '400 x 400' },
   ];
 
   // Currently selected preset; if null, custom size is used
@@ -45,12 +45,12 @@ export class CropperComponent {
 
   // Receives the cropped image result
   imageCropped(event: ImageCroppedEvent): void {
-    console.log('Cropped event:', event);
+    // console.log('Cropped event:', event);
     if (event.blob) {
       // Convert the Blob to Base64 for display
       this.convertBlobToBase64(event.blob).then((base64: string) => {
         this.croppedImage = base64;
-        console.log('Converted base64:', base64);
+        // console.log('Converted base64:', base64);
       });
     } else if (event.objectUrl) {
       // Fallback: if Blob isn't available, use the objectUrl directly
@@ -93,15 +93,15 @@ export class CropperComponent {
 
   // Optional event handlers for additional feedback
   cropperReady(): void {
-    console.log('Cropper ready');
+    // console.log('Cropper ready');
   }
 
   loadImageFailed(): void {
-    console.error('Failed to load image');
+    // console.error('Failed to load image');
   }
 
   imageLoaded(image: LoadedImage): void {
-    console.log('Image loaded', image);
+    // console.log('Image loaded', image);
   }
 
   // Convert a Blob to a Base64 string using FileReader
@@ -116,22 +116,22 @@ export class CropperComponent {
 
   downloadImage(format: 'png' | 'jpeg' | 'webp'): void {
     if (!this.croppedImage) {
-      console.error('No image to download');
+      // console.error('No image to download');
       return;
     }
-  
+
     // Convert base64 to Blob
     const base64Data = this.croppedImage.split(',')[1]; // Remove the Base64 header
     const byteCharacters = atob(base64Data);
     const byteNumbers = new Array(byteCharacters.length);
-  
+
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-  
+
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: `image/${format}` });
-  
+
     // Create a download link
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -140,5 +140,4 @@ export class CropperComponent {
     link.click();
     document.body.removeChild(link);
   }
-  
 }

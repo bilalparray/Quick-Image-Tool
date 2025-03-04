@@ -1,91 +1,100 @@
 <div class="image-cropper-container">
+  <header>
     <h2>Advanced Image Cropper</h2>
-  
-    <div class="main-content">
-      <!-- Tool Section (Left) -->
-      <div class="tool-section">
-        <!-- Image Upload -->
-        <div class="upload-section">
+  </header>
+
+  <div class="main-content">
+    <!-- Tool Section (Left) -->
+    <div class="tool-section">
+      <!-- Image Upload -->
+      <div class="upload-section">
+        <label class="custom-file-upload">
           <input type="file" (change)="fileChangeEvent($event)" />
-        </div>
-  
-        <!-- Display the cropper when an image is selected -->
-        <div *ngIf="imageChangedEvent" class="cropper-wrapper">
-          <image-cropper
-            [imageChangedEvent]="imageChangedEvent"
-            [maintainAspectRatio]="maintainAspectRatio"
-            [aspectRatio]="aspectRatio"
-            format="png"
-            [transform]="{ scale: zoomLevel, rotate: rotation }"
-            (imageCropped)="imageCropped($event)"
-            (imageLoaded)="imageLoaded($event)"
-            (cropperReady)="cropperReady()"
-            (loadImageFailed)="loadImageFailed()"
-          ></image-cropper>
-        </div>
-  
-        <!-- Crop Settings -->
-        <div class="controls">
-          <h3>Crop Size Options</h3>
-          <div class="preset-buttons">
-            <button *ngFor="let size of presetCropSizes" (click)="setPresetSize(size)">
-              {{ size.label }}
-            </button>
-            <button (click)="setPresetSize(null)">Custom</button>
-          </div>
-  
-          <!-- Custom Size Inputs -->
-          <div *ngIf="!selectedPreset" class="custom-size-inputs">
-            <label>
-              Width:
-              <input
-                type="number"
-                [(ngModel)]="customWidth"
-                (change)="onCustomSizeChange()"
-                placeholder="Enter width"
-              />
-            </label>
-            <label>
-              Height:
-              <input
-                type="number"
-                [(ngModel)]="customHeight"
-                (change)="onCustomSizeChange()"
-                placeholder="Enter height"
-              />
-            </label>
-          </div>
-  
-          <!-- Zoom Control -->
-          <div class="zoom-control">
-            <label>Zoom:</label>
-            <input type="range" min="0.5" max="3" step="0.1" [(ngModel)]="zoomLevel" />
-          </div>
-  
-          <!-- Rotation Control -->
-          <div class="rotation-control">
-            <label>Rotate:</label>
-            <button (click)="onRotateLeft()">Rotate Left</button>
-            <button (click)="onRotateRight()">Rotate Right</button>
-          </div>
-        </div>
+          Choose Image
+        </label>
       </div>
-  
-      <!-- Result Section (Right) -->
-      <div class="result-section">
-        <!-- Display the Cropped Image -->
-        <div *ngIf="croppedImage" class="result">
-          <h3>Cropped Image Result</h3>
-          <img [src]="croppedImage" alt="Cropped Image" />
+
+      <!-- Display the cropper when an image is selected -->
+      <div *ngIf="imageChangedEvent" class="cropper-wrapper">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="maintainAspectRatio"
+          [aspectRatio]="aspectRatio"
+          format="png"
+          [transform]="{ scale: zoomLevel, rotate: rotation }"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded($event)"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+        ></image-cropper>
+      </div>
+
+      <!-- Crop Settings -->
+      <div class="controls">
+        <h3>Crop Size Options</h3>
+        <div class="preset-buttons">
+          <button *ngFor="let size of presetCropSizes" (click)="setPresetSize(size)">
+            {{ size.label }}
+          </button>
+          <button (click)="setPresetSize(null)">Custom</button>
         </div>
-  
-        <!-- Download Buttons -->
-        <div *ngIf="croppedImage" class="download-buttons">
-          <h3>Download Cropped Image</h3>
-          <button (click)="downloadImage('png')">Download as PNG</button>
-          <button (click)="downloadImage('jpeg')">Download as JPG</button>
-          <button (click)="downloadImage('webp')">Download as WEBP</button>
+
+        <!-- Custom Size Inputs -->
+        <div *ngIf="!selectedPreset" class="custom-size-inputs">
+          <label>
+            Width:
+            <input
+              type="number"
+              [(ngModel)]="customWidth"
+              (change)="onCustomSizeChange()"
+              placeholder="Enter width"
+            />
+          </label>
+          <label>
+            Height:
+            <input
+              type="number"
+              [(ngModel)]="customHeight"
+              (change)="onCustomSizeChange()"
+              placeholder="Enter height"
+            />
+          </label>
+        </div>
+
+        <!-- Zoom Control -->
+        <div class="zoom-control">
+          <label>Zoom:</label>
+          <input type="range" min="0.5" max="3" step="0.1" [(ngModel)]="zoomLevel" />
+        </div>
+
+        <!-- Rotation Control -->
+        <div class="rotation-control">
+          <label>Rotate:</label>
+          <button (click)="onRotateLeft()">Rotate Left</button>
+          <button (click)="onRotateRight()">Rotate Right</button>
         </div>
       </div>
     </div>
+
+    <!-- Result Section (Right) -->
+  <!-- Result Section (Right) -->
+<div class="result-section">
+  <!-- Image Display Container -->
+  <div class="result">
+    <h3>Cropped Image Result</h3>
+    <div class="result-image-container" *ngIf="croppedImage">
+      <img [src]="croppedImage" alt="Cropped Image" />
+    </div>
   </div>
+
+  <!-- Download Buttons (always visible at the bottom) -->
+  <div *ngIf="croppedImage" class="download-buttons">
+    <h3>Download Cropped Image</h3>
+    <button (click)="downloadImage('png')">Download as PNG</button>
+    <button (click)="downloadImage('jpeg')">Download as JPG</button>
+    <button (click)="downloadImage('webp')">Download as WEBP</button>
+  </div>
+</div>
+
+  </div>
+</div>
