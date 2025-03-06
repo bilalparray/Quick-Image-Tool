@@ -1,4 +1,9 @@
 <div class="image-converter-container">
+  <!-- Message Display -->
+  <div *ngIf="message" class="message" [ngClass]="{'error': messageType === 'error', 'success': messageType === 'success'}">
+    {{ message }}
+  </div>
+
   <!-- Input for selecting an image -->
   <div class="section">
     <label for="imageInput" class="label">Select an Image:</label>
@@ -18,10 +23,10 @@
 
   <!-- Render the Base64 as an image -->
   <div class="section">
-    <button (click)="renderBase64AsImage()" class="button render-btn">Render Base64 as Image</button>
+    <button (click)="renderBase64AsImage()" class="button render-btn">Render Base64 as Image from Text Box</button>
     <div *ngIf="convertedImageSrc" class="image-preview">
       <h3 class="image-title">Rendered Image:</h3>
-      <img [src]="convertedImageSrc" alt="Converted from Base64" class="image" />
+      <img [src]="convertedImageSrc" alt="Converted from Base64" class="image" (error)="onImageLoadError()" />
     </div>
   </div>
 </div>

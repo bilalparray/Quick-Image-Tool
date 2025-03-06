@@ -1,8 +1,8 @@
 /* Container for the image converter tool */
 .image-converter-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1.5rem;
+  // max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -10,12 +10,28 @@
   font-family: Arial, sans-serif;
 }
 
-/* General section styling */
-.section {
-  margin-bottom: 1.5rem;
+/* Message styling */
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
 }
 
-/* Labels for input and textarea */
+/* General section styling */
+.section {
+  margin-bottom: 0.5rem;
+}
+
+/* Labels for inputs and textarea */
 .label {
   display: block;
   font-weight: bold;
@@ -28,16 +44,16 @@
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 100%;
+  width: 95%;
   font-size: 1rem;
   cursor: pointer;
 }
 
 /* Textarea styling */
 .textarea {
-  width: 100%;
+  width: 95%;
   height: 150px;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-family: monospace;
@@ -60,7 +76,6 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
 .button:hover {
   background-color: #0056b3;
 }
@@ -71,7 +86,6 @@
   margin-top: 1rem;
   background-color: #28a745;
 }
-
 .render-btn:hover {
   background-color: #218838;
 }
@@ -97,6 +111,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 /* Button group for copy buttons */
 .button-group {
   display: flex;
@@ -108,7 +123,6 @@
 .button.secondary {
   background-color: #6c757d;
 }
-
 .button.secondary:hover {
   background-color: #5a6268;
 }
