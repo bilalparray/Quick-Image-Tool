@@ -46,7 +46,7 @@ export class ConverterComponent {
       return;
     }
 
-    this.selectedImages.forEach((image, index) => {
+    this.selectedImages.forEach((image) => {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const img = new Image();
@@ -65,9 +65,18 @@ export class ConverterComponent {
           ctx.drawImage(img, 0, 0);
 
           const convertedImage = canvas.toDataURL(this.outputFormat);
-          const fileName = `${index + 1}.${
-            this.outputFormat.split('/')[1]
-          }`;
+
+          // Preserve the original file name and only change its extension
+          const originalName = image.name;
+          const newExtension = this.outputFormat.split('/')[1];
+          const nameParts = originalName.split('.');
+          // Remove the last part (old extension) and rejoin the remaining parts
+          const baseName =
+            nameParts.length > 1
+              ? nameParts.slice(0, -1).join('.')
+              : originalName;
+          const fileName = `${baseName}.${newExtension}`;
+
           this.convertedImageData.push({ url: convertedImage, name: fileName });
         };
       };
