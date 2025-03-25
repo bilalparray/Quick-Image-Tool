@@ -6,11 +6,10 @@ import { Base64Component } from './base64/base64.component';
 import { CropperComponent } from './cropper/cropper.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'converter', component: ConverterComponent },
   { path: 'resizer', component: ResizerComponent },
   { path: 'base64', component: Base64Component },
   { path: 'cropper', component: CropperComponent },
-  { path: '**', redirectTo: 'home' },
+  { path: '**', redirectTo: '' },
 ];

@@ -3,11 +3,10 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-base64',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './base64.component.html',
-  styleUrls: ['./base64.component.scss'],
+    selector: 'app-base64',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './base64.component.html',
+    styleUrls: ['./base64.component.scss']
 })
 export class Base64Component {
   base64Image: string = '';

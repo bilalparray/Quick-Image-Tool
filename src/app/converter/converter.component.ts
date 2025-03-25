@@ -12,11 +12,10 @@ interface ProcessedImage {
 }
 
 @Component({
-  selector: 'app-converter',
-  templateUrl: './converter.component.html',
-  styleUrls: ['./converter.component.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+    selector: 'app-converter',
+    templateUrl: './converter.component.html',
+    styleUrls: ['./converter.component.scss'],
+    imports: [CommonModule, FormsModule]
 })
 export class ConverterComponent {
   selectedImages: File[] = [];

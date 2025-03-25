@@ -5,11 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-image-cropper',
-  templateUrl: './cropper.component.html',
-  styleUrls: ['./cropper.component.scss'],
-  standalone: true,
-  imports: [ImageCropperComponent, FormsModule, CommonModule],
+    selector: 'app-image-cropper',
+    templateUrl: './cropper.component.html',
+    styleUrls: ['./cropper.component.scss'],
+    imports: [ImageCropperComponent, FormsModule, CommonModule]
 })
 export class CropperComponent {
   // File input event data

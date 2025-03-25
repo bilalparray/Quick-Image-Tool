@@ -13,11 +13,10 @@ interface ImageData {
 }
 
 @Component({
-  selector: 'app-resizer',
-  templateUrl: './resizer.component.html',
-  styleUrls: ['./resizer.component.scss'],
-  imports: [FormsModule, CommonModule],
-  standalone: true,
+    selector: 'app-resizer',
+    templateUrl: './resizer.component.html',
+    styleUrls: ['./resizer.component.scss'],
+    imports: [FormsModule, CommonModule]
 })
 export class ResizerComponent {
   // Array to hold the original uploaded images
