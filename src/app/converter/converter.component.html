@@ -3,27 +3,40 @@
 
   <div class="file-input">
     <input type="file" accept="image/*" multiple (change)="onFilesSelected($event)" />
+    <div *ngIf="selectedImages.length > 0" class="upload-count">
+      <p>Files uploaded: {{ selectedImages.length }}</p>
+    </div>
   </div>
 
   <div class="format-selector" *ngIf="selectedImages.length > 0">
     <label for="format">Select Format:</label>
     <select id="format" [(ngModel)]="outputFormat">
-
-      <option value="{{item.value}}" *ngFor="let item of availableFormats">{{item.label}}</option>
+      <option *ngFor="let item of availableFormats" [value]="item.value">
+        {{ item.label }}
+      </option>
     </select>
-
     <button (click)="convertImages()">Convert</button>
   </div>
 
-  <div class="converted-images" *ngIf="convertedImageData.length > 0">
+  <!-- Gallery of processed images and placeholders -->
+  <div class="converted-images" *ngIf="processedImages.length > 0">
     <h3>Converted Images</h3>
     <div class="image-gallery">
-      <div class="image-card" *ngFor="let convertedImage of convertedImageData; let i = index">
-        <img [src]="convertedImage.url" alt="Converted Image {{ i + 1 }}" />
-        <a [href]="convertedImage.url" [download]="convertedImage.name">Download</a>
+      <div class="image-card" *ngFor="let item of processedImages; let i = index">
+        <div *ngIf="item.processing" class="processing-placeholder">
+          <p>Processing image {{ i + 1 }}...</p>
+          <div class="loader"></div>
+        </div>
+        <div *ngIf="!item.processing && item.url" class="image-content">
+          <img [src]="item.url" alt="Converted Image {{ i + 1 }}" />
+          <p class="file-name">{{ getTruncatedFileName(item.name) }}</p>
+          <a [href]="item.url" [download]="item.name">Download</a>
+        </div>
       </div>
     </div>
 
-    <button (click)="downloadAllFiles()" class="download-all-btn">Download All</button>
+    <button (click)="downloadZip()" class="download-zip-btn">
+      Download All Processed as Zip
+    </button>
   </div>
 </div>
